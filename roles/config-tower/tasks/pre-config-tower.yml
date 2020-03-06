@@ -1,11 +1,11 @@
 - name: Generate var file for order_svc.sh script
   template:
-    src: aws_jq_vars.yml
+    src: aws_jq_vars.yml.j2
     dest: /tmp/aws_jq_vars.yml
 
 - name: Generate var file for tower module
   template:
-    src: tower_info.yml
+    src: tower_info.yml.j2
     dest: /tmp/tower_info.yml
 
 - name: Copy opentlc ssh keys
@@ -13,8 +13,7 @@
     src: "{{path_to_opentlc_key}}"
     dest: /root/secret.pem
 
-
 - name: Copy inventory vars
   copy:
     src: inventory_vars.json
-    dest: /root/inventory_vars.json
+    dest: "{{lookup('env', 'HOME')}}/inventory_vars.json"

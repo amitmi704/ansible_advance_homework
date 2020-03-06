@@ -1,10 +1,34 @@
 ---
 
 # tasks file for osp.servers
-- name: Create new server instances and attaches them a network and passes metadata to the instance
+- name: Show Ext_Network
+  debug:
+    var: item
+  loop: "{{ osp_servers | dict2items }}"
 
+- name: Create new server instances, attaches Internal network and passes metadata to the instance
+  os_server:
+    flavor: "{{item['value']['flavor']}}"
+    image: "{{item['value']['image']}}"
+    key_name: ansible_ssh
+    meta: "{{item['value']['meta'][0]}}"
+    name: "{{item['value']['name']}}"
+    nics: net-name=int_network
+    security_groups: "{{item['value']['security_group']}}"
+    state: "{{stack_state}}"
+    userdata: |
+      #!/bin/bash
+      curl -o /tmp/openstack.pub http://www.opentlc.com/download/ansible_bootcamp/openstack_keys/openstack.pub
+      cat /tmp/openstack.pub >> /home/cloud-user/.ssh/authorized_keys
+      curl -o /tmp/internal.repo http://www.opentlc.com/download/ansible_bootcamp/repo/internal.repo
+      cp /tmp/internal.repo /etc/yum.repos.d/internal.repo
+  loop: "{{ osp_servers | dict2items }}"
+#    - { name: frontend, sg: frontend, meta: { group: frontends, deployment_name: QA } }
+#    - app1
+#    - app2
+#    - db1
 
-- name: Add floating IP to Servers
+#- name: Add floating IP to Servers
    
 
-- name: Wait for server to be available
+#- name: Wait for server to be available

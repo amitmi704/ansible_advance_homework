@@ -2,13 +2,13 @@
 # vars file for roles/config-tower
 org_name: Default 
 scm_branch: master 
-scm_url: "{{ github_repo }}"
+scm_url: "{{lookup('env', 'GITHUB_REPO')}}"
 proj_name: "Homework Assignment"
 user_name: admin 
 password: r3dh4t1!
 ssh_cred_name: "Connect_to_workstation"
 user_cred_name: "cloud-user"
-user_cred_path: "/root/.ssh/openstack.pem"
+user_cred_path: "~/.ssh/openstack.pem"
 static_inventory_name: scm_inventory
 instance_group_name: osp
 workflow_template_name: cicd_workflow
@@ -31,7 +31,7 @@ opentlc_cred_name: "Opentlc key"
 job_template_aws_ssh_keys: "SSH keys three tier app"
 ec2_inventory_source: "Three tier inventory source"
 aws_region_name: "{{ REGION_NAME }}"
-tag_filters: "tag:instance_filter=three-tier-app-{{ EMAIL }}"
+tag_filters: "tag:instance_filter=three-tier-app-{{ EMAIL | regex_search('^(.+?)@', '\\1') | first }}"
 scm_inventory_source: "SCM three tier inventory source"
 path_to_scm_inventory: scm_inventory
 aws_read_keys: "AWS Access Key"
@@ -41,4 +41,11 @@ job_template_name_3tier_app_aws: "3 tier app on Prod"
 aws_cred_name: "Creds for AWS instances"
 job_template_smoke_aws: "Smoke test Prod env"
 aws_smoke_app_playbook: site-smoketest-aws.yml
-
+opentlc_login: "{{lookup('env', 'OPENTLC_LOGIN')}}"
+opentlc_password: "{{lookup('env', 'OPENTLC_PASSWORD')}}"
+param_repo_base: "{{lookup('env', 'JQ_REPO_BASE')}}"
+tower_GUID: "{{lookup('env', 'TOWER_GUID')}}"
+path_to_opentlc_key: "~/.ssh/mykey.pem"
+osp_GUID: "{{lookup('env', 'OSP_GUID')}}"
+REGION_NAME: "{{lookup('env', 'REGION')}}"
+EMAIL: "{{lookup('env', 'RH_MAIL_ID')}}"

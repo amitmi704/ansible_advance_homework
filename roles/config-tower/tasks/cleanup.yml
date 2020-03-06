@@ -1,0 +1,9 @@
+- name: Cleanup temporary files
+  file:
+    name: "{{item}}"
+    state: absent
+  loop:
+    - /root/secret.pem
+    - ~/inventory_vars.json
+    - /tmp/aws_jq_vars.yml
+    - /tmp/tower_info.yml
