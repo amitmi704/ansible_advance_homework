@@ -8,14 +8,15 @@
 
 - name: Create new server instances, attaches Internal network and passes metadata to the instance
   os_server:
+    cloud: "{{cloud_name}}"
     flavor: "{{item['value']['flavor']}}"
     image: "{{item['value']['image']}}"
     key_name: ansible_ssh
     meta: "{{item['value']['meta'][0]}}"
     name: "{{item['value']['name']}}"
     nics: net-name=int_network
+    region_name: "{{cloud_region_name}}"
     security_groups: "{{item['value']['security_group']}}"
-    state: "{{stack_state}}"
     userdata: |
       #!/bin/bash
       curl -o /tmp/openstack.pub http://www.opentlc.com/download/ansible_bootcamp/openstack_keys/openstack.pub
@@ -23,12 +24,28 @@
       curl -o /tmp/internal.repo http://www.opentlc.com/download/ansible_bootcamp/repo/internal.repo
       cp /tmp/internal.repo /etc/yum.repos.d/internal.repo
   loop: "{{ osp_servers | dict2items }}"
-#    - { name: frontend, sg: frontend, meta: { group: frontends, deployment_name: QA } }
-#    - app1
-#    - app2
-#    - db1
 
-#- name: Add floating IP to Servers
-   
+- name: Add floating IP to Servers
+  os_floating_ip:
+    cloud: "{{cloud_name}}"
+    network: ext_network
+    reuse: yes
+    region_name: "{{cloud_region_name}}"
+    server: "{{item['value']['name']}}"
+    wait: yes
+  loop: "{{ osp_servers | dict2items }}"
 
-#- name: Wait for server to be available
+- name: Get OpenStack servers
+  os_server_facts:
+    cloud: ospcloud
+  register: result
+
+- name: Wait for server to be available
+  wait_for:
+    host: "{{item.public_v4}}"
+    port: 22
+    search_regex: OpenSSH
+    timeout: 600
+  delegate_to: "{{inventory_hostname}}"
+  with_items:
+    - "{{result.ansible_facts.openstack_servers}}"
