@@ -46,6 +46,10 @@
     when: rollback is defined
     include_role:
       name: osp-instance-delete
+  - name: Fail if rolledback
+    when: rollback is defined
+    fail:
+      msg: QA checkout failed
 
   handlers:
     - name: Decom QA
