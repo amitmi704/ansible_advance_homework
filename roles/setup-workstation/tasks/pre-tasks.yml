@@ -1,7 +1,8 @@
 ---
 - name: yum clean
   shell: yum clean all
-  warn: false
+  args:
+    warn: false
 - name: install pip
   yum:
     name:

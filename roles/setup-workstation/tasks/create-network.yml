@@ -5,7 +5,7 @@
     state: "{{ item['value']['state'] }}"
     name: "{{ item['value']['network_name'] }}"
     external: "{{ item['value']['external'] }}"
-  loop: "{{ osp_networks }}"
+  loop: "{{ osp_networks | dict2items }}"
 
 - name: Configuration of Subnets for Public and Private SubNets
   os_subnet:
@@ -15,14 +15,14 @@
     name: "{{ item['value']['subnet_name'] }}"
     cidr: "{{ item['value']['cidr_network'] }}"
     dns_nameservers:
-      - 8.8.8.7
+      - 8.8.4.4
       - 8.8.8.8
     host_routes:
       - destination: 0.0.0.0/0
         nexthop: 10.10.10.0
       - destination: 192.168.0.0/24
         nexthop: 192.168.0.0
-  loop: "{{ osp_networks }}"
+  loop: "{{ osp_networks | dict2items }}"
 
 - name: Create Router
   os_router:
@@ -34,5 +34,5 @@
       - { subnet: ext_subnet }
     interfaces:
       - int_subnet
-  with_dict: "{{ osp_router }}"
+  loop: "{{ osp_router | dict2items }}"
 ...
