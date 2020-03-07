@@ -11,3 +11,4 @@
     name: "{{item.id}}"
     state: absent
   loop: "{{info['openstack_servers']}}"
+...

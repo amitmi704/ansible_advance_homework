@@ -6,3 +6,4 @@
     regexp: '^Defaults\s*requiretty'
     replace: 'Defaults  !requiretty'
     backup: yes
+...

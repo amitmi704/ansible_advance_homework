@@ -4,6 +4,4 @@
   gather_facts: no
   roles:
     - role: osp-servers
-      vars:
-        stack_state: present
 ...

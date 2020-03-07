@@ -1,5 +1,4 @@
 ---
-
 # tasks file for osp.servers
 - name: Show Ext_Network
   debug:
@@ -49,3 +48,4 @@
   delegate_to: "{{inventory_hostname}}"
   with_items:
     - "{{result.ansible_facts.openstack_servers}}"
+...

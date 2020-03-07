@@ -1,3 +1,4 @@
+---
 - hosts: workstation
   gather_facts: true
   roles:
@@ -31,3 +32,4 @@
   roles:
     - {name: base-config, tags: base-config}
     - {name: db-tier, tags: [dbs, postgres]}
+...

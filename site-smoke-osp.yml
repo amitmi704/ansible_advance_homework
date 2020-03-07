@@ -1,3 +1,4 @@
+---
 - hosts: workstation
   gather_facts: false
   force_handlers: true
@@ -55,3 +56,4 @@
     - name: Decom QA
       set_fact:
         rollback: True
+...

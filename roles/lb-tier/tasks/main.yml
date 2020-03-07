@@ -1,6 +1,5 @@
 ---
 # tasks file for lb-tier
-
 - name: install haproxy
   package:
     name: haproxy
@@ -22,3 +21,4 @@
     name: haproxy
     enabled: yes
     state: started
+...
