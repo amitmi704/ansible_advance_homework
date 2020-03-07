@@ -11,7 +11,8 @@
         - 200
     register: web_check
     ignore_errors: yes
-  - name: Fail if 'Ansible has done its job' is not in the page content
+
+  - name: "Fail if 'Ansible has done its job' is not in the page content"
     when: "'Ansible has done its job' not in item['content']"
     loop: "{{web_check['results']}}"
     loop_control:
