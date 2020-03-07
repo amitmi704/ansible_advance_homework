@@ -1,2 +1,24 @@
 ---
 # tasks file for lb-tier
+
+- name: install haproxy
+  package:
+    name: haproxy
+    state: latest
+  notify:
+   - enable haproxy service
+   - restart haproxy service
+
+- name: configure haproxy
+  template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+  notify:
+   - enable haproxy service
+   - restart haproxy service
+
+- name: start haproxy service
+  service:
+    name: haproxy
+    enabled: yes
+    state: started

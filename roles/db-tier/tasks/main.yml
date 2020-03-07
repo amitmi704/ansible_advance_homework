@@ -1,2 +1,28 @@
 ---
 # tasks file for db-tier
+- name: install postgresql-server
+  package:
+    name:
+      - postgresql-server
+    state: latest
+  notify:
+    - enable postgres service
+    - restart postgres service
+
+- name: Check for present postgres data
+  stat:
+    path: /var/lib/pgsql/data/PG_VERSION
+  register: pgsql_stat
+
+- name: initialise postgres
+  command: postgresql-setup initdb
+  when: not pgsql_stat.stat.exists
+  notify:
+    - enable postgres service
+    - restart postgres service
+
+- name: start and enable postgres service
+  service:
+    name: postgresql
+    enabled: yes
+    state: started
