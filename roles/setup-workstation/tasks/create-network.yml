@@ -5,7 +5,7 @@
     state: "{{ item['value']['state'] }}"
     name: "{{ item['value']['network_name'] }}"
     external: "{{ item['value']['external'] }}"
-  loop: osp_networks
+  loop: "{{ osp_networks }}"
 
 - name: Configuration of Subnets for Public and Private SubNets
   os_subnet:
@@ -22,7 +22,7 @@
         nexthop: 10.10.10.0
       - destination: 192.168.0.0/24
         nexthop: 192.168.0.0
-  loop: osp_networks
+  loop: "{{ osp_networks }}"
 
 - name: Create Router
   os_router:
@@ -34,5 +34,5 @@
       - { subnet: ext_subnet }
     interfaces:
       - int_subnet
-  with_dict: osp_router
+  with_dict: "{{ osp_router }}"
 ...
