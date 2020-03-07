@@ -1,3 +1,4 @@
+---
 - name: yum clean
   shell: yum clean all
 - name: install pip
@@ -28,3 +29,4 @@
     user: cloud-user
     state: present
     key: "{{ lookup('file', '~/.ssh/openstack.pub') }}"
+...
